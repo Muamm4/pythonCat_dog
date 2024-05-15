@@ -98,11 +98,15 @@ def create_model():
 # Salvar os Dados
 checkpoint_path = "checkpoint/cp.weights.h5"
 checkpoint_dir = os.path.dirname(checkpoint_path)
+
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,save_weights_only=True,verbose=1)
 model = create_model()
 # Load the latest checkpoint
 if os.path.exists(checkpoint_path):
     model.load_weights(checkpoint_path)
+else:
+    os.mkdir(checkpoint_dir)
+
 model.summary()
 # Train the model
 history = model.fit(train_ds, batch_size=32, epochs=10, validation_data=val_ds, verbose=1, callbacks=[cp_callback])
